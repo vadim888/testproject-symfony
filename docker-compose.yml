@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+    nginx:
+        image: nginx:latest
+        container_name: ${PROJECT_NAME}-nginx
+        ports:
+            - 8080:80
+        volumes:
+            - ./docker/nginx/hosts:/etc/nginx/conf.d
+            - ./:/var/www
+        depends_on:
+            - php-fpm
+
+    php-fpm:
+        build: ./docker/php
+        container_name: ${PROJECT_NAME}-php-fpm
+        volumes:
+            - ./:/var/www
+        environment:
+            XDEBUG_CONFIG: "remote_host=host.docker.internal remote_enable=1"
+            PHP_IDE_CONFIG: "serverName=Docker"
+        user: "1000:1000"
+        depends_on:
+            - db
+
+    db:
+        image: postgres:14
+        container_name: ${PROJECT_NAME}-postgres
+        restart: on-failure
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        volumes:
+            - ./var/postgresql/data:/var/lib/postgresql/data:rw
+        ports:
+            - "5432:5432"
