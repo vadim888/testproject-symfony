@@ -54,23 +54,12 @@ class BookRepository extends ServiceEntityRepository
 
         if (!empty($name)) {
             $qb
-                ->andWhere('b.name LIKE :name')
+                ->leftJoin('b.translations', 't')
+                ->andWhere("b.name LIKE :name OR (t.field = 'name' AND t.content LIKE :name)")
                 ->setParameter('name', "%$name%")
             ;
         }
 
         return  $qb;
     }
-
-    /*
-    public function findOneBySomeField($value): ?Book
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

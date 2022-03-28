@@ -56,7 +56,6 @@ class Book implements Translatable
      *   mappedBy="object",
      *   cascade={"persist", "remove"}
      * )
-     * @Serializer\Expose()
      */
     private $translations;
 
@@ -76,6 +75,23 @@ class Book implements Translatable
         if (!$this->translations->contains($t)) {
             $this->translations[] = $t;
             $t->setObject($this);
+        }
+    }
+
+    /**
+     * @param array $translations
+     */
+    public function addNameTranslations(array $translations)
+    {
+        foreach ($translations as $translation) {
+            $this->addTranslation(new BookTranslation($translation['locale'], 'name', $translation['name']));
+        }
+    }
+
+    public function removeTranslation(BookTranslation $t)
+    {
+        if (!$this->translations->contains($t)) {
+            $this->translations->removeElement($t);
         }
     }
 

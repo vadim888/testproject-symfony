@@ -53,21 +53,7 @@ class AuthorController extends AbstractFOSRestController
         $author = $form->getData();
         $this->em->getRepository(Author::class)->add($author, true);
 
-        $view = $this->view($author, 200);
+        $view = $this->view($author, Response::HTTP_CREATED);
         return $this->handleView($view);
     }
-
-//    /**
-//     * @param Request $request
-//     * @return Response
-//     *
-//     * @Rest\Get("/list", name="app_author_list")
-//     */
-//    public function list(Request $request, PaginatorInterface $paginator): Response
-//    {
-//        $authors = $this->em->getRepository(Author::class)->findAll();
-//        $view = $this->view($authors);
-//
-//        return $this->handleView($view);
-//    }
 }

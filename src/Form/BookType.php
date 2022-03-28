@@ -6,6 +6,8 @@ use App\Entity\Author;
 use App\Entity\Book;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,7 +16,13 @@ class BookType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
+            ->add('name', TextType::class)
+            ->add('translations', CollectionType::class, [
+                'entry_type' => BookTranslationType::class,
+                'allow_add' => true,
+                'allow_delete' => false,
+                'mapped' => false,
+            ])
             ->add('authors', EntityType::class, [
                 'class' => Author::class,
                 'multiple' => true,

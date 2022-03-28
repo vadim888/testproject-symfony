@@ -14,6 +14,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * @Rest\Route("/api")
@@ -56,17 +57,20 @@ class BookController extends AbstractFOSRestController
 
         /** @var Book $book */
         $book = $form->getData();
-        $book->addTranslation(new BookTranslation('en', 'name', "{$book->getName()} translated"));
+        $translations = $form['translations']->getData();
+
+        $book->addNameTranslations($translations);
 
         $this->em->getRepository(Book::class)->add($book, true);
         $this->em->refresh($book);
 
-        $view = $this->view($book, 200);
+        $view = $this->view($book, Response::HTTP_CREATED);
         return $this->handleView($view);
     }
 
     /**
      * @param Request $request
+     * @param PaginatorInterface $paginator
      * @return Response
      *
      * @Rest\Get("/book/search", name="app_book_search")
@@ -95,16 +99,13 @@ class BookController extends AbstractFOSRestController
      * @param int $bookId
      * @return Response
      */
-    public function show(int $id, Request $request): Response
+    public function show(int $id): Response
     {
         /** @var Book $book */
         $book = $this->em->find(Book::class, $id);
         if (!$book) {
             throw $this->createNotFoundException();
         }
-
-        $book->setTranslatableLocale($request->getLocale());
-        $this->em->refresh($book);
 
         $view = $this->view($book);
 
