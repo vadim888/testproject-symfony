@@ -27,9 +27,7 @@ class BookFactory
             $book->addAuthor($author);
         }
 
-        foreach ($translations as $locale => $value) {
-            $book->addTranslation(new BookTranslation($locale, 'name', $value));
-        }
+        $book->addNameTranslations($translations);
 
         return $book;
     }

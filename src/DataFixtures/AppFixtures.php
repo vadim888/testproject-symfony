@@ -15,7 +15,7 @@ class AppFixtures extends Fixture
             $author = AuthorFactory::create("Автор $i");
             $manager->persist($author);
 
-            $book = BookFactory::create("Книга $i", ['en' => "Book $i"], [$author]);
+            $book = BookFactory::create("Книга $i", [['locale' => 'en', 'name' => "Book $i"]], [$author]);
             $manager->persist($book);
 
             if ($i % 100 === 0) {

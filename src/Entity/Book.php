@@ -84,14 +84,9 @@ class Book implements Translatable
     public function addNameTranslations(array $translations)
     {
         foreach ($translations as $translation) {
-            $this->addTranslation(new BookTranslation($translation['locale'], 'name', $translation['name']));
-        }
-    }
-
-    public function removeTranslation(BookTranslation $t)
-    {
-        if (!$this->translations->contains($t)) {
-            $this->translations->removeElement($t);
+            if (!empty($translation['locale']) && !empty($translation['name'])) {
+                $this->addTranslation(new BookTranslation($translation['locale'], 'name', $translation['name']));
+            }
         }
     }
 
