@@ -45,9 +45,9 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
-     /**
-      * @return Book[] Returns an array of Book objects
-      */
+    /**
+     * @return Book[] Returns an array of Book objects
+     */
     public function findByNameQb(?string $name)
     {
         $qb = $this->createQueryBuilder('b');
@@ -55,7 +55,7 @@ class BookRepository extends ServiceEntityRepository
         if (!empty($name)) {
             $qb
                 ->leftJoin('b.translations', 't')
-                ->andWhere("b.name LIKE :name OR (t.field = 'name' AND t.content LIKE :name)")
+                ->andWhere("ILIKE(b.name, :name) = true OR (t.field = 'name' AND ILIKE(t.content, :name) = true)")
                 ->setParameter('name', "%$name%")
             ;
         }
