@@ -3,7 +3,7 @@
 #####Для того, чтобы запустить проект, нужно: 
 
 #####Поднять docker-контейнеры  
-docker-composer up --build
+docker-compose up --build
 
 #####Зайти в php-контейнер testproject-php-fpm, выполнить:  
 composer install  
