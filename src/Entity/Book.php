@@ -14,6 +14,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
+ * @ORM\Table(indexes={@ORM\Index(name="name_idx", columns={"name"})})
  * @Gedmo\TranslationEntity(class=BookTranslation::class)
  * @Serializer\ExclusionPolicy("all")
  */
